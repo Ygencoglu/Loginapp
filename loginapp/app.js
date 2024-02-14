@@ -1,4 +1,3 @@
-// app.js
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
@@ -29,9 +28,7 @@ const redisClient = setupRedis();
 connectMongoDB();
 connectPostgreSQL();
 const User = require('./models/User');
-// RedisStore'u doğru bir şekilde oluştur
 const RedisStore = require('connect-redis');
-// Express session ayarları Redis ile
 app.use(session({
   secret: 'aaa',
   saveUninitialized: false,
@@ -42,13 +39,11 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24 // Örneğin 1 gün için
   }
 }));
-// Express ayarları
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-// Passport konfigürasyonu
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
@@ -84,7 +79,6 @@ function sendToQueue(queue, message) {
   rabbitMQChannel.sendToBuffer(queue, Buffer.from(message));
 }
 
-// Socket.io
 io.on('connection', (socket) => {
   socket.on('join', (userId) => {
     socket.join(userId);
@@ -92,8 +86,6 @@ io.on('connection', (socket) => {
 
   socket.on('private message', async (message) => {
     socket.to(message.to).emit('private message', message);
-
-    // Mesajı veritabanına kaydet
     await new Chat({
         from: message.from,
         to: message.to,
