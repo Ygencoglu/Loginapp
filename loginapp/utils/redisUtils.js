@@ -1,4 +1,3 @@
-// utils/redisUtils.js
 const redis = require('redis');
 
 function setupRedis() {
