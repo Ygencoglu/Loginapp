@@ -1,5 +1,3 @@
-<!-- views/search.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Search</title>
-  <!-- Bootstrap CSS -->
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
@@ -69,33 +67,25 @@
     </div>
   </div>
 
-  <!-- Bootstrap JS, jQuery, Popper.js -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <script>
-    // Function to handle live search
     async function liveSearch() {
       const input = document.getElementById('searchedUsername');
       const resultContainer = document.getElementById('searchResults');
       const userDetailsContainer = document.getElementById('userDetails');
-  
-      // Clear previous results and details
       resultContainer.innerHTML = '';
       userDetailsContainer.innerHTML = '';
-  
-      // Get the search query
       const query = input.value.trim();
   
-      // Perform a request only if the query is not empty
       if (query !== '') {
         try {
           // Send an AJAX request to the server
           const response = await fetch(`/live-search?query=${query}`);
           const data = await response.json();
   
-          // Display the results
           data.forEach(user => {
             const listItem = document.createElement('li');
             listItem.textContent = user.username;
@@ -114,7 +104,6 @@
       }
     }
   
-    // Function to update details on the page
     function updateDetails(data) {
       const userDetailsContainer = document.getElementById('userDetails');
   
