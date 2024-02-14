@@ -1,4 +1,4 @@
-// utils/rabbitMQUtils.js
+
 const amqp = require('amqplib');
 
 async function setupRabbitMQ() {
