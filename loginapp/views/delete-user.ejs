@@ -1,0 +1,48 @@
+<!-- views/delete-user.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete User</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .form-container {
+      max-width: 500px; /* Genişlik artırıldı */
+      margin: 5% auto; /* Merkezleme ve üst boşluk ayarı */
+      padding: 25px; /* Padding artırıldı */
+      background-color: #ffffff;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.15); /* Gölgelendirme artırıldı */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2 class="text-center">Delete User</h2>
+      <form action="/delete-user" method="POST">
+        <div class="form-group">
+          <label for="username">User ID:</label>
+          <input type="text" id="username" name="username" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-danger btn-block">Delete User</button>
+      </form>
+      <a href="/dashboard" class="btn btn-secondary btn-block mt-3">Back to Dashboard</a> <!-- Düğme boşluğu ayarlandı -->
+    </div>
+  </div>
+
+  <!-- Bootstrap JS, jQuery, Popper.js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
