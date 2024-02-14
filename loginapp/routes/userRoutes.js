@@ -1,4 +1,3 @@
-// userRoutes.js
 const express = require('express');
 const router = express.Router();
 const isLoggedIn = require('../middlewares/authMiddleware');
@@ -6,7 +5,7 @@ const User = require('../models/User');
 const pool = require('../utils/dbUtils').connectPostgreSQL();
 const bcrypt = require('bcryptjs');
 
-// Kullanıcı listesi
+
 router.get('/user-list', isLoggedIn, async (req, res) => {
     try {
     // MongoDB'den tüm kullanıcıları çek
@@ -19,7 +18,7 @@ router.get('/user-list', isLoggedIn, async (req, res) => {
   }
 });
 
-// Kullanıcıya ayrıntı ekleme
+
 router.get('/add-details', isLoggedIn, async (req, res) => {
     try {
         // PostgreSQL'den kullanıcının mevcut detayını kontrol et
@@ -42,7 +41,6 @@ router.post('/add-details', isLoggedIn, async (req, res) => {
     const { username, city, birthdate } = req.body;
 
   try {
-    // Kullanıcının ID'sini kullanıcı adına göre bul
     const user = await User.findOne({ username: username });
     if (!user) {
       return res.render('add-details', { error: 'User not found.' });
@@ -50,7 +48,6 @@ router.post('/add-details', isLoggedIn, async (req, res) => {
 
     const userId = user._id;
 
-    // PostgreSQL'den kullanıcının mevcut detayını kontrol et
     const existingDetail = await pool.query('SELECT * FROM user_details WHERE user_id = $1', [userId]);
 
     if (existingDetail.rows.length > 0) {
@@ -68,7 +65,6 @@ router.post('/add-details', isLoggedIn, async (req, res) => {
   }
 });
 
-// Kullanıcı silme
 router.get('/delete-user', isLoggedIn, (req, res) => {
     res.render('delete-user');
 });
@@ -77,22 +73,13 @@ router.post('/delete-user', isLoggedIn, async (req, res) => {
     try {
         const username = req.body.username;
     
-        // MongoDB'den kullanıcıyı bul
         const user = await User.findOne({ username: username });
         if (!user) {
           return res.status(404).send('Kullanıcı bulunamadı');
         }
-    
-        // MongoDB'deki kullanıcının _id'sini al
         const userId = user._id;
-    
-        // PostgreSQL'den kullanıcı detaylarını sil
         await pool.query('DELETE FROM user_details WHERE user_id = $1', [userId.toString()]);
-    
-        // MongoDB'den kullanıcıyı sil
         await User.deleteOne({ _id: userId });
-    
-        // Kullanıcı silindikten sonra /search sayfasına yönlendir
         res.redirect('/search');
       } catch (error) {
         console.error(error);
@@ -100,12 +87,10 @@ router.post('/delete-user', isLoggedIn, async (req, res) => {
       }
 });
 
-// Canlı arama özelliği
 router.get('/live-search', isLoggedIn, async (req, res) => {
     const query = req.query.query;
 
   try {
-    // MongoDB'den kullanıcıları bul ve sadece gerekli verileri döndür
     const users = await User.find({ username: { $regex: query, $options: 'i' } }, 'username _id');
 
     res.json(users);
@@ -115,7 +100,7 @@ router.get('/live-search', isLoggedIn, async (req, res) => {
   }
 });
 
-// Kullanıcı arama
+
 router.get('/search', isLoggedIn, (req, res) => {
     res.render('search');
 });
@@ -124,7 +109,6 @@ router.post('/search', isLoggedIn, async (req, res) => {
     const searchedUsername = req.body.searchedUsername;
 
   try {
-    // MongoDB'den kullanıcıyı bul
     const user = await User.findOne({ username: searchedUsername });
 
     if (!user) {
@@ -148,20 +132,14 @@ router.post('/add-user', isLoggedIn, async (req, res) => {
   const { username, password, city, birthdate } = req.body;
 
   try {
-    // Şifreyi hash'le
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // MongoDB'ye yeni bir kullanıcı eklemek için
     const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
-
-    // Eklenen kullanıcının MongoDB ID'sini alın
     const userId = newUser._id;
-
-    // PostgreSQL'de ilgili tabloya veri eklemek için
     await pool.query('INSERT INTO user_details (user_id, city, birthdate) VALUES ($1, $2, $3)', [userId, city, birthdate]);
 
-    // Kullanıcı eklendikten sonra /search sayfasına yönlendir
+
     res.redirect('/search');
   } catch (err) {
     console.error(err);
