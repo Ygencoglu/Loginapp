@@ -1,24 +1,18 @@
-// Function to handle live search
     async function liveSearch() {
       const input = document.getElementById('searchedUsername');
       const resultContainer = document.getElementById('searchResults');
       const userDetailsContainer = document.getElementById('userDetails');
-  
-      // Clear previous results and details
       resultContainer.innerHTML = '';
       userDetailsContainer.innerHTML = '';
   
-      // Get the search query
       const query = input.value.trim();
   
-      // Perform a request only if the query is not empty
       if (query !== '') {
         try {
-          // Send an AJAX request to the server
+        
           const response = await fetch(`/live-search?query=${query}`);
           const data = await response.json();
   
-          // Display the results
           data.forEach(user => {
             const listItem = document.createElement('li');
             listItem.textContent = user.username;
@@ -37,7 +31,6 @@
       }
     }
   
-    // Function to update details on the page
     function updateDetails(data) {
       const userDetailsContainer = document.getElementById('userDetails');
   
